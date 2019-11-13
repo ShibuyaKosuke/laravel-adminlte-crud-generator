@@ -245,3 +245,8 @@ And append to `route/web.php` automatically.
 ```php
 Route::resource('/users', 'UserController');
 ```
+
+# Thanks to
+
+[@jeroennoten](https://github.com/jeroennoten)
+[@dwightwatson](https://github.com/dwightwatson)
