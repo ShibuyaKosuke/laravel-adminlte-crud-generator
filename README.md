@@ -204,6 +204,15 @@ php artisan migrate
 php artisan crud:generate
 ```
 
+and then you should append this sentence to 'configs/app.php'.
+
+```php
+/*
+ * Package Service Providers...
+ */
+\App\Providers\ViewServiceProvider::class,
+```
+
 ## Options
 
 ### Overwrite files
