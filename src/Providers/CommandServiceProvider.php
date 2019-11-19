@@ -3,6 +3,7 @@
 namespace Shibuyakosuke\LaravelCrudGenerator\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Shibuyakosuke\LaravelCrudGenerator\Console\CrudCheckCommand;
 use Shibuyakosuke\LaravelCrudGenerator\Console\MakeCrudCommand;
 
 /**
@@ -25,19 +26,28 @@ class CommandServiceProvider extends ServiceProvider
 
     protected function registerCommands()
     {
-        $this->app->singleton('command.make.crud', function () {
+        $this->app->singleton('command.crud.generate', function () {
             return new MakeCrudCommand();
         });
 
         $this->commands([
-            'command.make.crud',
+            'command.crud.generate',
+        ]);
+
+        $this->app->singleton('command.crud.check', function () {
+            return new CrudCheckCommand();
+        });
+
+        $this->commands([
+            'command.crud.check',
         ]);
     }
 
     public function provides()
     {
         return [
-            'command.make.crud',
+            'command.crud.generate',
+            'command.crud.check'
         ];
     }
 }

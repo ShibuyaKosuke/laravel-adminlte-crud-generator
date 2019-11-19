@@ -19,14 +19,77 @@ class Table extends Model
     protected $table = 'INFORMATION_SCHEMA.TABLES';
 
     protected $appends = [
-        'model'
     ];
 
+    /**
+     * boot
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new OwnScope());
+    }
+
+    /**
+     * @return string
+     */
+    public function getFillableAttribute()
+    {
+        return implode(', ', $this->columns->reject(function (Column $column) {
+            return in_array($column->COLUMN_NAME, [
+                'id',
+                'created_at',
+                'updated_at',
+                'deleted_at',
+                'created_by',
+                'updated_by',
+                'deleted_by'
+            ]);
+        })->map(function (Column $column) {
+            return sprintf('\'%s\'', $column->COLUMN_NAME);
+        })->toArray());
+    }
+
+    /**
+     * @return string
+     */
+    public function getDatesAttribute()
+    {
+        return implode(', ', $this->columns->reject(function (Column $column) {
+            return in_array($column->COLUMN_NAME, [
+                'id',
+                'created_at',
+                'updated_at',
+                'deleted_at',
+                'created_by',
+                'updated_by',
+                'deleted_by'
+            ]);
+        })->filter(function (Column $column) {
+            return in_array($column->COLUMN_TYPE, [
+                'date',
+                'datetime',
+                'timestamp',
+                'time',
+                'year'
+            ]);
+        })->map(function (Column $column) {
+            return sprintf('\'%s\'', $column->COLUMN_NAME);
+        })->toArray());
+    }
+
+    /**
+     * @param $table_name
+     * @return string
+     */
     public static function getModelName($table_name)
     {
         return Str::studly(Str::singular($table_name));
     }
 
+    /**
+     * @return |null
+     */
     public function getPrimaryKeyAttribute()
     {
         $column = $this->columns->filter(function (Column $column) {
@@ -45,6 +108,15 @@ class Table extends Model
     public function getModelAttribute()
     {
         return Str::studly(Str::singular($this->TABLE_NAME));
+    }
+
+    /**
+     * @return string
+     */
+    public function getClassNameAttribute()
+    {
+        $model_path = \config('adminlte_crud.default_model_path');
+        return sprintf('%s%s.php', $model_path, Str::studly(Str::singular($this->TABLE_NAME)));
     }
 
     /**
@@ -69,15 +141,6 @@ class Table extends Model
     public function hasDeletedBy(): bool
     {
         return $this->columns->pluck('COLUMN_NAME')->contains('deleted_by');
-    }
-
-    /**
-     * boot
-     */
-    protected static function boot()
-    {
-        parent::boot();
-        static::addGlobalScope(new OwnScope());
     }
 
     /**
