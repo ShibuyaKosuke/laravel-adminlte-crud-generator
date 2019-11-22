@@ -31,7 +31,7 @@ trait DatabaseCommonColumns
      */
     public function comment(string $table, string $comment)
     {
-        $sql = sprintf("ALTER TABLE `%s` COMMENT '%s'", $table, $comment);
+        $sql = sprintf("ALTER TABLE `%s` COMMENT '%s'", trim($table), trim($comment));
         DB::statement($sql);
     }
 }

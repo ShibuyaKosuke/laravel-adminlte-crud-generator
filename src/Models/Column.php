@@ -59,6 +59,37 @@ class Column extends Model
         return $this->IS_NULLABLE === 'NO';
     }
 
+    public function getValidateTypeAttribute()
+    {
+        switch ($this->DATA_TYPE) {
+            case 'datetime':
+            case 'timestamp':
+                return 'date';
+            case 'date':
+                return 'date_format:Y-m-d';
+            case 'time':
+                return 'date_format:H:i:s';
+            case 'year':
+                return 'date_format:Y';
+            case 'varchar':
+            case 'char':
+            case 'text':
+                return 'string';
+            case 'tinyint':
+            case 'smallint':
+            case 'mediumint':
+            case 'int':
+            case 'bigint':
+            case 'integer':
+                return 'integer';
+            case 'decimal':
+            case 'numeric':
+            case 'float':
+            case 'double':
+                return 'numeric';
+        }
+    }
+
     /**
      * @return BelongsTo
      */

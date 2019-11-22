@@ -75,6 +75,10 @@ class Request extends CrudAbstract
             if ($column->CHARACTER_MAXIMUM_LENGTH) {
                 $rules[$column_name][] = sprintf('max:%d', $column->CHARACTER_MAXIMUM_LENGTH);
             }
+
+            // data type
+            $rules[$column_name][] = $column->validate_type;
+
         });
 
         $table->constraints->each(function (KeyColumnUsage $constraint) use (&$rules) {
