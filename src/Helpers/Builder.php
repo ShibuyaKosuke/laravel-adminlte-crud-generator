@@ -84,7 +84,7 @@ class Builder
                         && $constraint->REFERENCED_TABLE_NAME
                         && $constraint->REFERENCED_COLUMN_NAME;
                 })->reject(function ($constraint) {
-                    return in_array($constraint->COLUMN_NAME, ['created_by', 'updated_by', 'deleted_by']);
+                    return in_array($constraint->COLUMN_NAME, ['created_by', 'updated_by', 'deleted_by'], true);
                 })->first();
             if ($foreign_key) {
                 $name = $foreign_key->REFERENCED_TABLE_NAME;
@@ -163,7 +163,7 @@ class Builder
     {
         $forms = [];
         $this->table->columns->each(function ($column) use (&$forms) {
-            if (in_array($column->COLUMN_NAME, $this->skip_columns)) {
+            if (in_array($column->COLUMN_NAME, $this->skip_columns, true)) {
                 return;
             }
             if ($column->COLUMN_KEY === 'PRI') {
@@ -198,7 +198,7 @@ class Builder
     {
         $forms = [];
         $this->table->columns->each(function ($column) use (&$forms) {
-            if (in_array($column->COLUMN_NAME, $this->skip_columns)) {
+            if (in_array($column->COLUMN_NAME, $this->skip_columns, true)) {
                 return;
             }
             if ($column->COLUMN_KEY === 'PRI') {

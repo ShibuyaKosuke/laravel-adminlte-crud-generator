@@ -45,7 +45,7 @@ class Show
 
         if ($this->foreign_key) {
 
-            if (in_array($name, $this->skip_columns)) {
+            if (in_array($name, $this->skip_columns, true)) {
                 $form[] = sprintf(
                     "<dt>{{ __('columns.%s.%s') }}</dt>",
                     $table,

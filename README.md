@@ -258,4 +258,5 @@ Route::resource('/users', 'UserController');
 # Thanks to
 
 [@jeroennoten](https://github.com/jeroennoten)
+
 [@dwightwatson](https://github.com/dwightwatson)

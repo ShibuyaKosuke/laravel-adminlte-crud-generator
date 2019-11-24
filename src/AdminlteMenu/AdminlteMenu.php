@@ -27,7 +27,11 @@ class AdminlteMenu
         return [
             'text' => \Lang::get(sprintf('tables.%s', $table_name)),
             'route' => sprintf('%s.index', $table_name),
-            'active' => [$table_name, sprintf('%s/*', $table_name), sprintf('regex:@^%s(page=[0-9]+)?$@', $table_name)]
+            'active' => [
+                $table_name,
+                sprintf('%s/*', $table_name),
+                sprintf('regex:@^%s(page=[0-9]+)?$@', $table_name)
+            ]
         ];
     }
 

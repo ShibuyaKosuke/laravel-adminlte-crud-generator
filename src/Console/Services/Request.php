@@ -64,7 +64,7 @@ class Request extends CrudAbstract
         $table->columns->each(function (Column $column) use (&$rules) {
             $column_name = $column->COLUMN_NAME;
             if (in_array($column_name,
-                ['id', 'created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at'])) {
+                ['id', 'created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at'], true)) {
                 return;
             }
 
@@ -84,7 +84,7 @@ class Request extends CrudAbstract
         $table->constraints->each(function (KeyColumnUsage $constraint) use (&$rules) {
             $column_name = $constraint->COLUMN_NAME;
             if (in_array($column_name,
-                ['id', 'created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at'])) {
+                ['id', 'created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at'], true)) {
                 return;
             }
             $rules[$column_name][] = sprintf('exists:%s,%s',
@@ -113,7 +113,7 @@ class Request extends CrudAbstract
                     && $constraint->REFERENCED_COLUMN_NAME;
             })->reject(function ($constraint) {
                 return in_array($constraint->COLUMN_NAME,
-                    ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at']);
+                    ['created_by', 'updated_by', 'deleted_by', 'created_at', 'updated_at', 'deleted_at'], true);
             });
         foreach ($foreign_key as $column) {
             $attributes[] = sprintf('            \'%s\' => trans(\'tables.%s\'),',

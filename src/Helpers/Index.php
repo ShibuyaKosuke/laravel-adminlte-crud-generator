@@ -52,7 +52,7 @@ class Index
                 Str::singular($table)
             );
         } elseif ($this->foreign_key) {
-            if (in_array($name, $this->skip_columns)) {
+            if (in_array($name, $this->skip_columns, true)) {
                 return sprintf('<td>{{ $%s->%s->name }}</td>',
                     $model_name,
                     Str::camel($name)

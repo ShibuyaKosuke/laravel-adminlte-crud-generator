@@ -120,7 +120,7 @@ class Models extends CrudAbstract
                         'created_at',
                         'updated_at',
                         'deleted_at'
-                    ]);
+                    ], true);
                 })->map(function ($item, $key) {
                     return sprintf('\'%s\',', $item->COLUMN_NAME);
                 })->toArray()
@@ -131,9 +131,9 @@ class Models extends CrudAbstract
         $dates = sprintf($this->dates(),
             implode(PHP_EOL . str_repeat(' ', 8),
                 $table->columns->reject(function ($value) {
-                    return in_array($value->COLUMN_NAME, ['created_at', 'updated_at', 'deleted_at']);
+                    return in_array($value->COLUMN_NAME, ['created_at', 'updated_at', 'deleted_at'], true);
                 })->filter(function (Column $column) {
-                    return in_array($column->DATA_TYPE, ['timestamp', 'datetime', 'date']);
+                    return in_array($column->DATA_TYPE, ['timestamp', 'datetime', 'date'], true);
                 })->map(function ($item) {
                     return sprintf('\'%s\',', $item->COLUMN_NAME);;
                 })->toArray()
@@ -144,7 +144,7 @@ class Models extends CrudAbstract
         // BelongsTo
         $table->constraints->each(function (KeyColumnUsage $constraint) use (&$methods) {
             $column_name = $constraint->COLUMN_NAME;
-            if (in_array($column_name, ['created_by', 'updated_by', 'deleted_by'])) {
+            if (in_array($column_name, ['created_by', 'updated_by', 'deleted_by'], true)) {
                 return;
             }
             if (is_null($constraint->REFERENCED_TABLE_NAME)) {
@@ -170,7 +170,7 @@ class Models extends CrudAbstract
             if (is_null($constraint->TABLE_NAME)) {
                 return;
             }
-            if (in_array($constraint->COLUMN_NAME, ['created_by', 'updated_by', 'deleted_by'])) {
+            if (in_array($constraint->COLUMN_NAME, ['created_by', 'updated_by', 'deleted_by'], true)) {
                 return;
             }
             $method_name = Str::camel($constraint->TABLE_NAME);
