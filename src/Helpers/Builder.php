@@ -70,10 +70,11 @@ class Builder
         $html[] = $this->indent(4) . '</div>';
         $html[] = $this->indent(3) . '</form>';
         $html[] = $this->indent(2) . '</div>'; // box-header
-        $html[] = $this->indent(2) . '<div class="box-body table-responsive">';
-        $html[] = $this->indent(3) . '<table class="table">';
+        $html[] = $this->indent(2) . '<div class="box-body">';
+        $html[] = $this->indent(3) . '<div class="table-responsive">';
+        $html[] = $this->indent(4) . '<table class="table">';
         $html[] = $this->indent(4) . '<thead>';
-        $html[] = $this->indent(4) . '<tr>';
+        $html[] = $this->indent(5) . '<tr>';
 
         $this->table->columns->each(function ($column) use (&$html) {
             $foreign_key = $column
@@ -88,24 +89,26 @@ class Builder
                 })->first();
             if ($foreign_key) {
                 $name = $foreign_key->REFERENCED_TABLE_NAME;
-                $html[] = $this->indent(5) . sprintf('<th>{{ __(\'tables.%s\') }}</th>', $name);
+                $html[] = $this->indent(6) . sprintf('<th>{{ __(\'tables.%s\') }}</th>', $name);
             } else {
-                $html[] = $this->indent(5) . sprintf('<th>{{ __(\'columns.%s.%s\') }}</th>',
+                $html[] = $this->indent(6) . sprintf('<th>{{ __(\'columns.%s.%s\') }}</th>',
                         $this->table->TABLE_NAME,
                         $column->COLUMN_NAME);
             }
         });
-        $html[] = $this->indent(4) . '</tr>';
-        $html[] = $this->indent(4) . '</thead>';
-        $html[] = $this->indent(4) . '<tbody>';
-        $html[] = $this->indent(4) .
+        $html[] = $this->indent(5) . '</tr>';
+        $html[] = $this->indent(5) . '</thead>';
+        $html[] = $this->indent(5) . '<tbody>';
+        $html[] = $this->indent(5) .
             sprintf('@foreach($%s as $%s)', $this->table->TABLE_NAME, Str::singular($this->table->TABLE_NAME));
-        $html[] = $this->indent(5) . '<tr>';
-        $html[] = $this->indent(6) . implode(PHP_EOL . $this->indent(6), $forms);
+        $html[] = $this->indent(6) . '<tr>';
+        $html[] = $this->indent(7) . implode(PHP_EOL . $this->indent(7), $forms);
         $html[] = $this->indent(6) . '</tr>';
-        $html[] = $this->indent(4) . '@endforeach';
-        $html[] = $this->indent(4) . '</tbody>';
-        $html[] = $this->indent(3) . '</table>';
+        $html[] = $this->indent(5) . '@endforeach';
+        $html[] = $this->indent(5) . '</tbody>';
+        $html[] = $this->indent(4) . '</table>';
+        $html[] = $this->indent(3) . '</div>'; // table-responsive
+
         $html[] = $this->indent(2) . '</div>'; // box-body
         $html[] = $this->indent(2) . '<div class="box-footer">';
         $html[] = $this->indent(3) . '<div class="row">';
